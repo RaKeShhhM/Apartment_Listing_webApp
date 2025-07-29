@@ -46,7 +46,7 @@ Wanderlust is a full-stack travel web application that allows users to explore, 
 ## 🖼️ youtube video link
 https://youtu.be/aIO_Bz2INzc
 
-https://youtu.be/aIO_Bz2INzc
+
 
 ---
 
