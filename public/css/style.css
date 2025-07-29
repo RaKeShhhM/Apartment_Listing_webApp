@@ -1,0 +1,131 @@
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif!important;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+
+.container{
+    flex:1;
+}
+.navbar{
+    height: 5rem;
+    background-color: white;
+}
+
+.fa-compass{
+    color: #fe424d;
+    font-size: 2rem;
+}
+
+.nav-link{
+    color: #222222 !important /*important will overwrite the default color set by bootstrap  */
+}
+
+/*footer*/
+.f-info-links a {
+    text-decoration: none;
+    color: #222222;
+} 
+
+.f-info-links a:hover{
+    text-decoration: underline;
+}
+
+.f-info-links{
+    width: 100%;
+    text-align: center;
+}
+
+.f-info-socials, .msg{
+    width: 100%;
+    display: flex;
+    font-size: 1.2rem;
+    justify-content: center;
+    align-items: center;
+   
+}
+.f-info-socials i{
+    margin-right: 1.2rem;
+}
+
+
+.f-info{
+    height: 8rem;
+    background-color: #ebebeb;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: space-evenly;
+}
+
+/*cards*/
+.listing-card{
+    border:none !important
+    
+}
+
+.listing-link{
+    text-decoration: none;
+}
+
+/*card effect*/
+.card-img-overlay{
+    opacity: 0;
+}
+
+.card-img-overlay:hover{
+    opacity: 0.2;
+    background-color: white;
+}
+/*show ejs*/
+.add-btn{
+    background-color: #fe424d !important;
+    border: none !important;
+}
+.edit-btn{
+    background-color: #fe424d !important;
+    border: none !important;
+}
+.listing-image {
+      width: 100%;
+      max-height: 400px;
+      object-fit: cover;
+}
+
+.btn-edits {
+    transition: transform 0.1s ease-in-out;
+}
+.btn-edits:hover {
+    transform: scale(1.05);
+}
+
+
+/* error.ejs*/
+
+/*for show.ejs*/
+  .modal-backdrop-custom {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    z-index: 1050;
+  }
+
+  .custom-modal {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) scale(0.95);
+    max-width: 500px;
+    width: 90%;
+    z-index: 1060;
+    opacity: 0;
+    transition: all 0.3s ease;
+  }
+
+  .custom-modal.show {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }

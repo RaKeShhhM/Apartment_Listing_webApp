@@ -1,0 +1,72 @@
+<% layout("/layouts/boilerplate.ejs") %>
+<div class="row"><%# entire %>
+    <div class="col-8 offset-2"><%# col-8 gives wdth of 8 col and offset-2 gives 2 col margin from left to entire content %>
+        <br><br>
+        <h3>Create New Listing</h3>
+
+            <!-- "sending POST req of /listings which will add new hotel with given inputs" and 
+            listing[name] is used so its is easier to retrieve data in POST route -->
+        <form method="POST" action="/listings"  novalidate class="needs-validation">
+            <div class="mb-3">
+                <label for="title" class="form-label; mb-0">
+                   Title
+                </label>
+                <input name="listing[title]" placeholder="Add a catchy title" type="text"
+                class="form-control"
+                required/>
+                <div class="valid-feedback">Title looks good</div>
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label; mb-0">
+                    Description
+                </label>
+                <textarea name="listing[description]" class="form-control"
+                required></textarea>
+                <div class="invalid-feedback">Enter valid desciption</div>
+            </div>
+            <div class="mb-3">
+                <label for="image" class="form-label; mb-0">
+                    Image Link
+                </label>
+                
+                <input name="listing[image]" placeholder="enter image url/link" type="text" class="form-control">
+                
+            </div>
+            <div class="row">
+                <div class="mb-3 col-md-4">
+                    <label for="Price" class="form-label; mb-0">
+                        Price
+                    </label>
+                    <input name="listing[price]" placeholder="1200"  class="form-control"
+                    required>
+                    <div class="invalid-feedback">Enter valid Price</div>
+                </div>
+           
+                
+                <div class="mb-3 col-md-8" >
+                    <label for="Country" class="form-label; mb-0">
+                        Country
+                    </label>
+                    <input name="listing[country]" placeholder="India" type="text" class="form-control"
+                    required>
+                    <div class="invalid-feedback">Enter valid country name</div>
+                </div >
+            </div>
+            <div class="mb-3">
+                <label for="Location" class="form-label; mb-0">
+                    Location
+                </label>
+                <input name="listing[location]" placeholder="Asansol, West Bengal" type="text" class="form-control"
+                required>
+                <div class="invalid-feedback">Enter valid locaion</div>
+            </div>
+               
+            
+            
+            
+            <button class="btn btn-outline-light add-btn">Add</button>
+            <br><br><br>
+        </form>
+    </div>
+</div>
+<% layout("/layouts/boilerplate.ejs") %>
