@@ -2,7 +2,12 @@
 
 Wanderlust is a full-stack travel web application that allows users to explore, create, and manage travel destination listings. Authenticated users can post new places, upload images, leave reviews, and interact with other travelers.
 
-![Preview](./public/preview.png)
+---
+
+## 🖼️ youtube video link.. TO WATCH TO WEBSITE FUNCIONS
+https://youtu.be/aIO_Bz2INzc
+
+
 
 ---
 
@@ -40,12 +45,6 @@ Wanderlust is a full-stack travel web application that allows users to explore, 
 ✅ Flash Notifications (e.g., success/error messages)  
 ✅ Responsive UI using Bootstrap  
 ✅ Server-side validation with Joi  
-
----
-
-## 🖼️ youtube video link
-https://youtu.be/aIO_Bz2INzc
-
 
 
 ---
