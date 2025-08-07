@@ -8,7 +8,11 @@ const {isLoggedIn, isOwner,validateListing}=require("../middleware.js");
 
 const listingController=require("../controllers/listings.js");
 
+const multer  = require('multer')//to parse multiform/data and
 
+const {storage}=require("../cloudConfig.js");
+const upload = multer({storage});
+//const upload = multer({ dest: 'uploads/' })//creates uploads folder and keep photos in those folders
 
 //validating midddlewares
 // const validateListing=(req,res,next)=>{
@@ -75,6 +79,31 @@ router.get(
 // }
 );
 
+
+
+//search routes
+router.get("/search", async (req, res) => {
+    const query = req.query.query || "";
+
+    try {
+        const listings = await Listing.find({
+            $or: [
+                { title: { $regex: query, $options: "i" } },
+                { description: { $regex: query, $options: "i" } },
+                { location: { $regex: query, $options: "i" } },
+                { country: { $regex: query, $options: "i" } },
+            ],
+        });
+
+        res.render("listings/index.ejs", { allListings: listings });
+    } catch (e) {
+        console.error("Search route error:", e);
+        res.status(500).send("Something went wrong");
+    }
+});
+
+
+
 // SHOW route
 router.get(
   "/:id",
@@ -104,8 +133,12 @@ router.get(
 router.post(
     "/",
     isLoggedIn,
+    upload.single("listing[image]"),
     validateListing,
     wrapAsync(listingController.createListing)
+    // upload.single('listing[image]'),(req,res)=>{
+    //     res.send(req.file);
+    // }
 
 //      async (req,res)=>{
 //     // const {title,description,image,price,country,location}= req.body; basic way to retrive data // when listing[] is not used in new.ejs
@@ -160,6 +193,8 @@ router.put(
     "/:id",
     isLoggedIn,
     isOwner,
+    upload.single("listing[image]"),
+    validateListing,
     wrapAsync( listingController.updateListing)
 //      async (req,res) => {
 //     if(!req.body.listing){
@@ -188,5 +223,6 @@ router.delete(
     //     res.redirect("/listings");
     // }
 );
+
 
 module.exports=router;

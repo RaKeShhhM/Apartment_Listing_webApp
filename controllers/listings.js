@@ -33,7 +33,7 @@ module.exports.showListing=async (req, res) => {
     res.render("listings/show.ejs", { listing });
   };
 
-  module.exports.createListing= async (req,res)=>{
+  module.exports.createListing= async (req,res,next)=>{
       // const {title,description,image,price,country,location}= req.body; basic way to retrive data // when listing[] is not used in new.ejs
       //  console.log(req.body)
       // ;//req.body will give { listing : {title:"",..}}
@@ -53,9 +53,12 @@ module.exports.showListing=async (req, res) => {
     //   if(result.error){
     //       throw new ExpressError(400,result.error);
     //   }
-      
+      let url= req.file.path;
+      let filename=req.file.filename;
+
       const newListing= new Listing(req.body.listing);
       newListing.owner=req.user._id;
+      newListing.image={url,filename};
       
       await newListing.save();
   
@@ -72,16 +75,27 @@ module.exports.showListing=async (req, res) => {
             req.flash("error", "Listing you requested doesn't exist anymore");
             return res.redirect("/listings");   // ← add return here
         }
-        
-        res.render("listings/edit.ejs",{listing});  
+        let originalImageUrl=listing.image.url;
+        originalImageUrl=originalImageUrl.replace("/upload","/upload/w_250");
+        res.render("listings/edit.ejs",{listing,originalImageUrl});  
 }
 
 module.exports.updateListing=async (req,res) => {
     if(!req.body.listing){
         throw new ExpressError(400,"send valid data for listing");
     }
+    
     let {id} = req.params;
-    await Listing.findByIdAndUpdate(id,{...req.body.listing});// deconstructing the object and again forming the updated object
+    let listing= await Listing.findByIdAndUpdate(id,{...req.body.listing});// deconstructing the object and again forming the updated object
+
+    //checking if req.file exists or not
+    if(typeof req.file !=="undefined"){
+        let url= req.file.path;
+        let filename=req.file.filename;
+        listing.image={url, filename};
+        await listing.save();
+    }
+
     req.flash("success","Listing Updated!");
     res.redirect(`/listings/${id}`);
 };

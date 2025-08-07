@@ -1,4 +1,8 @@
+if(process.env.NODE_ENV!="production"){//means only use env file during development phase not after deployment
+    require("dotenv").config();
+}
 
+//console.log(process.env.CLOUD_NAME);
 const express=require("express");
 const app=express();
 const mongoose=require("mongoose");
@@ -10,7 +14,9 @@ const { name } = require("ejs");
 
 const ejsMate = require('ejs-mate');//for ejs mate templating (similar footer,header,css)
 
-const mongo_url="mongodb://127.0.0.1:27017/wanderlust";
+// const mongo_url="mongodb://127.0.0.1:27017/wanderlust";
+const dburl=process.env.ATLUSDB_URL;
+
 const wrapAsync=require("./utils/wrapAsync.js");
 const ExpressError = require('./utils/ExpressError');
 const {listingSchema,reviewSchema}=require("./schema.js");
@@ -23,11 +29,14 @@ const userRouter = require("./routes/user.js");
 
 
 const session=require("express-session");//for cookies
+const MongoStore = require('connect-mongo');//stores session on mongo atlus
+
 const flash=require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
 
+//const listingRoutes = require("./routes/listing.js");
 
 //connectd to db
 main()
@@ -39,19 +48,35 @@ main()
     });
 
 async function main() {
-    await mongoose.connect(mongo_url);
+    await mongoose.connect(dburl);
 
 }
 
 app.set("view engine","ejs");//showing ejs files from views folder
 app.set("views", path.join(__dirname, "views"));
-app.use(express.urlencoded({extended: true}));//for reading inputs from url... read route
+app.use(express.urlencoded({extended: true}));//for reading inputs from forms... read route
 app.use(methodOverride("_method"));
 app.engine("ejs",ejsMate);
 app.use(express.static(path.join(__dirname,"/public")));
 
+
+//creating store for sessions in mongo atlus db
+const store=MongoStore.create({ 
+    mongoUrl: dburl,
+    crypto:{
+        secret: process.env.SECRET,
+    },
+    touchAfter: 24*3600,//in sec
+
+});
+
+store.on("error",()=>{
+    console.log("error in mongo session store", err);
+})
+
 const sessionOptions={
-    secret: "mysupersecretcode",
+    store: store,
+    secret: process.env.SECRET,
     resave: false,
     saveUninitialized: true,
     cookie:{
@@ -63,12 +88,13 @@ const sessionOptions={
 
 
 
-app.get("/",(req,res)=>{
-    res.send("hi, i am root");
+// app.get("/",(req,res)=>{
+//     res.send("hi, i am root");
 
-});
+// });
 
 app.use(session(sessionOptions));//for cookies
+
 app.use(flash());//both these should be above routes
 
 //after session so that we can have saved info of any acc till it's expiry date
@@ -118,6 +144,10 @@ app.use("/", userRouter);
 // });
 
 //to handle all other errors if goes to non existent routes.. 
+
+//search
+//app.use("/listings", listings);
+
 app.all(/.*/, (req, res, next) => {
   next(new ExpressError(404, "Page Not Found"));
 });
@@ -128,6 +158,9 @@ app.use((err, req, res, next) => {
    //res.status(statusCode).send(message);
     res.status(statusCode).render("listings/error.ejs",{err});
 });
+
+
+
 
 
 app.listen(8080,()=>{

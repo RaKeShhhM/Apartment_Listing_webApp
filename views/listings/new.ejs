@@ -1,72 +1,162 @@
 <% layout("/layouts/boilerplate.ejs") %>
-<div class="row"><%# entire %>
-    <div class="col-8 offset-2"><%# col-8 gives wdth of 8 col and offset-2 gives 2 col margin from left to entire content %>
-        <br><br>
-        <h3>Create New Listing</h3>
 
-            <!-- "sending POST req of /listings which will add new hotel with given inputs" and 
-            listing[name] is used so its is easier to retrieve data in POST route -->
-        <form method="POST" action="/listings"  novalidate class="needs-validation">
-            <div class="mb-3">
-                <label for="title" class="form-label; mb-0">
-                   Title
-                </label>
-                <input name="listing[title]" placeholder="Add a catchy title" type="text"
-                class="form-control"
-                required/>
-                <div class="valid-feedback">Title looks good</div>
+<style>
+  /* --- Page background with decorative circles --- */
+  body {
+    background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%);
+    position: relative;
+    overflow-x: hidden;
+  }
+  /* Floating decorative circles */
+  .decor-circle {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.15;
+    background: #0d6efd;
+    animation: float 8s ease-in-out infinite;
+  }
+  .circle-1 { width: 200px; height: 200px; top: -50px; left: -50px; }
+  .circle-2 { width: 300px; height: 300px; bottom: -100px; right: -80px; }
+  @keyframes float { 
+    0%,100% { transform: translateY(0) } 
+    50%    { transform: translateY(20px) } 
+  }
+
+  /* --- Card styling --- */
+  .listing-form-card {
+    backdrop-filter: blur(10px);
+    background: rgba(255,255,255,0.85);
+    border: none;
+    border-radius: 1rem;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  }
+
+  /* --- Input group icons & focus state --- */
+  .input-group-text {
+    background: transparent;
+    border-right: 0;
+  }
+  .form-control {
+    border-left: 0;
+  }
+  .form-control:focus {
+    box-shadow: 0 0 0 0.2rem rgba(13,110,253,0.25);
+  }
+
+  /* --- Submit button hover --- */
+  .btn-submit {
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+</style>
+
+<!-- Decorative circles -->
+<div class="decor-circle circle-1"></div>
+<div class="decor-circle circle-2"></div>
+
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+
+      <!-- Form Card -->
+      <div class="card listing-form-card shadow-lg">
+        <div class="card-header text-center bg-transparent border-0 pb-0">
+          <!-- Page Title -->
+          <h2 class="fw-bold text-primary mb-1">➕ Create New Listing</h2>
+          <small class="text-muted">Fill in your apartment details below</small>
+        </div>
+
+        <div class="card-body px-5 pt-0">
+
+          <!-- BEGIN FORM -->
+          <form method="POST" action="/listings" enctype="multipart/form-data" class="needs-validation" novalidate>
+
+            <!-- Title Field -->
+            <div class="mb-4">
+              <label for="title" class="form-label">Title</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="fa-solid fa-tag"></i></span>
+                <input type="text" id="title" name="listing[title]" class="form-control" placeholder="My Cozy 2BHK" required>
+                <div class="invalid-feedback">Please enter a title.</div>
+              </div>
             </div>
-            <div class="mb-3">
-                <label for="description" class="form-label; mb-0">
-                    Description
-                </label>
-                <textarea name="listing[description]" class="form-control"
-                required></textarea>
-                <div class="invalid-feedback">Enter valid desciption</div>
+
+            <!-- Description Field -->
+            <div class="mb-4">
+              <label for="description" class="form-label">Description</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="fa-solid fa-align-left"></i></span>
+                <textarea id="description" name="listing[description]" class="form-control" rows="3" placeholder="A brief overview..." required></textarea>
+                <div class="invalid-feedback">Please enter a description.</div>
+              </div>
             </div>
-            <div class="mb-3">
-                <label for="image" class="form-label; mb-0">
-                    Image Link
-                </label>
-                
-                <input name="listing[image]" placeholder="enter image url/link" type="text" class="form-control">
-                
+
+            <!-- Image Upload -->
+            <div class="mb-4">
+              <label for="image" class="form-label">Upload Image</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="fa-solid fa-camera"></i></span>
+                <input type="file" id="image" name="listing[image]" class="form-control" accept="image/*" required>
+                <div class="invalid-feedback">Please upload an image.</div>
+              </div>
             </div>
+
+            <!-- Price & Country Row -->
             <div class="row">
-                <div class="mb-3 col-md-4">
-                    <label for="Price" class="form-label; mb-0">
-                        Price
-                    </label>
-                    <input name="listing[price]" placeholder="1200"  class="form-control"
-                    required>
-                    <div class="invalid-feedback">Enter valid Price</div>
+              <!-- Price -->
+              <div class="mb-4 col-md-4">
+                <label for="price" class="form-label">Price (₹)</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fa-solid fa-money-bill-wave"></i></span>
+                  <input type="number" id="price" name="listing[price]" class="form-control" placeholder="1200" min="0" required>
+                  <div class="invalid-feedback">Please enter a valid price.</div>
                 </div>
-           
-                
-                <div class="mb-3 col-md-8" >
-                    <label for="Country" class="form-label; mb-0">
-                        Country
-                    </label>
-                    <input name="listing[country]" placeholder="India" type="text" class="form-control"
-                    required>
-                    <div class="invalid-feedback">Enter valid country name</div>
-                </div >
+              </div>
+              <!-- Country -->
+              <div class="mb-4 col-md-8">
+                <label for="country" class="form-label">Country</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fa-solid fa-globe"></i></span>
+                  <input type="text" id="country" name="listing[country]" class="form-control" placeholder="India" required>
+                  <div class="invalid-feedback">Please enter a country.</div>
+                </div>
+              </div>
             </div>
-            <div class="mb-3">
-                <label for="Location" class="form-label; mb-0">
-                    Location
-                </label>
-                <input name="listing[location]" placeholder="Asansol, West Bengal" type="text" class="form-control"
-                required>
-                <div class="invalid-feedback">Enter valid locaion</div>
+
+            <!-- Location Field -->
+            <div class="mb-4">
+              <label for="location" class="form-label">Location</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="fa-solid fa-map-marker-alt"></i></span>
+                <input type="text" id="location" name="listing[location]" class="form-control" placeholder="Asansol, West Bengal" required>
+                <div class="invalid-feedback">Please enter a location.</div>
+              </div>
             </div>
-               
-            
-            
-            
-            <button class="btn btn-outline-light add-btn">Add</button>
-            <br><br><br>
-        </form>
+
+            <!-- Terms Checkbox -->
+            <div class="form-check mb-4">
+              <input class="form-check-input" type="checkbox" id="terms" required>
+              <label class="form-check-label" for="terms">
+                I confirm the above details are correct
+              </label>
+              <div class="invalid-feedback">You must agree before submitting.</div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary btn-submit py-2">Submit Listing</button>
+            </div>
+
+          </form>
+          <!-- END FORM -->
+
+        </div>
+      </div>
+      <!-- End Card -->
+
     </div>
+  </div>
 </div>
-<% layout("/layouts/boilerplate.ejs") %>

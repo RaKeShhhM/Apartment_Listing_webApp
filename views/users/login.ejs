@@ -1,4 +1,4 @@
-<% layout("/layouts/boilerplate") %>
+<!-- <% layout("/layouts/boilerplate") %>
 
     <body>
         <div class="row  mt-3">
@@ -23,4 +23,205 @@
             </div>
            </div>
         </div>
-    </body>
+    </body> -->
+    
+<style>
+    body {
+        background: linear-gradient(to right, #dbeafe, #ddd6fe);
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .auth-wrapper {
+        min-height: calc(100vh - 200px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 30px;
+    }
+
+    .auth-box {
+        display: flex;
+        max-width: 1000px;
+        width: 100%;
+        height: 60vh;
+        background: rgba(255, 255, 255, 0.6);
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        transition: transform 1s ease-in-out;
+    }
+
+    .auth-box.swap .left-pane {
+        order: 2;
+        animation: slideRight 1s forwards;
+    }
+
+    .auth-box.swap .right-pane {
+        order: 1;
+        animation: slideLeft 1s forwards;
+    }
+
+    @keyframes slideLeft {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
+
+    @keyframes slideRight {
+        from { transform: translateX(-100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
+
+    .left-pane {
+        flex: 1;
+        padding: 20px;
+        background: #ffffff50;
+        display: grid;
+        gap: 20px;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 400px ;
+        grid-template-areas:
+            "big1 big1";
+    }
+
+
+    .left-pane .img2 {
+        grid-area: big1;
+        border-radius: 15px;
+        background-image: url('/images/image6.jpg');
+        background-size: cover;
+        background-position: center;
+    }
+
+    .right-pane {
+        flex: 1;
+        padding: 40px;
+        background: rgba(255, 255, 255, 0.8);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .right-pane h3 {
+        text-align: center;
+        font-weight: 600;
+        margin-bottom: 25px;
+        color: #111;
+    }
+
+    .form-control {
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid #ccc;
+        color: #111;
+    }
+
+    .form-control::placeholder {
+        color: #999;
+    }
+
+    .btn-success {
+        width: 100%;
+        font-weight: 500;
+        font-size: 1.1rem;
+    }
+
+    .toggle-password {
+        position: absolute;
+        right: 15px;
+        top: 38px;
+        cursor: pointer;
+        color: #666;
+    }
+
+    .form-group.position-relative {
+        position: relative;
+    }
+
+    .signup-link {
+        margin-top: 15px;
+        text-align: center;
+    }
+
+    .signup-link a {
+        color: #222;
+        font-weight: 500;
+        text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+        .auth-box {
+            flex-direction: column;
+            height: auto;
+        }
+
+        .left-pane{
+            display: none;
+        }
+        
+        .right-pane {
+            height: 90vh;
+            width: 90%;
+        }
+
+        .left-pane {
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto;
+            grid-template-areas: "big" "big";
+        }
+    }
+</style>
+
+<div class="auth-wrapper">
+    <div class="auth-box" id="authBox">
+        <!-- Left pane with real house images -->
+        <div class="left-pane">
+            <!-- <div class="img1"></div> -->
+            <div class="img2"></div>
+        </div>
+
+        <!-- Right pane with login -->
+        <div class="right-pane">
+            <h3>Login to StayComfy</h3>
+            <form id="loginForm" action="/login" method="post" novalidate class="needs-validation">
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" class="form-control" name="username" id="username" placeholder="Enter Username" required>
+                </div>
+                <div class="mb-3 form-group position-relative">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" name="password" id="password" placeholder="Enter Password" required>
+                    <i class="bi bi-eye-slash toggle-password" id="togglePassword"></i>
+                </div>
+                <button type="submit" class="btn btn-success mt-2" id="loginBtn">Login</button>
+                <div class="signup-link">
+                    Don't have an account? <a href="/signup">Sign up</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script>
+    const togglePassword = document.getElementById('togglePassword');
+    const password = document.getElementById('password');
+    const loginBtn = document.getElementById('loginBtn');
+    const authBox = document.getElementById('authBox');
+
+    togglePassword.addEventListener('click', () => {
+        const type = password.getAttribute('type') === "password" ? "text" : "password";
+        password.setAttribute('type', type);
+        togglePassword.classList.toggle("bi-eye");
+        togglePassword.classList.toggle("bi-eye-slash");
+    });
+
+    // On login click → swap left and right
+    loginBtn.addEventListener('click', (e) => {
+        e.preventDefault(); // Prevent form submission for animation demo
+        authBox.classList.toggle("swap");
+
+        // Uncomment below line to submit the form after animation (optional delay)
+        setTimeout(() => document.getElementById('loginForm').submit(), 1000);
+    });
+</script>

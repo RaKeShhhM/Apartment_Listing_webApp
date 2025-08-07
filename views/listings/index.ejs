@@ -1,33 +1,84 @@
 <% layout("/layouts/boilerplate.ejs") %>
 
+<style>
+    .tax-info {
+        display: none;
+    }
+    .tax-toggle {
+        border: 1px solid black;
+        border-radius: 1rem;
+        height: 3.5rem;
+        padding: 1rem;
+        width: 20%;
+    }
+    .tops {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 1.5rem 0;
+    }
+    .listing-link {
+        text-decoration: none;
+        color: inherit;
+    }
+</style>
+
 <body>
-    <h3>All the listings are here :-</h3>
-  
-    <!-- <form method="GET" action="/listings/new">
-        <button>Create New Listing</button>
-    </form> -->
-
-    <%#class row- all cards in one row and entire colum, row-cols-lg-3 means max 3 card in large screen %>
-    <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1">
-        <% for(let listing of allListings) {%>
-            <a href="/listings/<%=listing._id %>" class="listing-link">
-                <div class="card col listing-card" style="width: 20rem;">
-                <img src="<%=listing.image%>" class="card-img-top" alt="listing_image"
-                style="height: 20rem;">
-                <div class="card-img-overlay"></div>
-                <div class="card-body">
-                    <p class="card-text">
-                        <b><%= listing.title %></b><br>
-
-                        &#8377;<%= listing.price.toLocaleString("en-IN") %>/night
-                    </p>
-                </div>
+    <div class="container my-4 p-4 rounded shadow-sm bg-white border tops-section">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+            <!-- Message -->
+            <div class="text-center text-md-start">
+                <h3 class="mb-0 text-primary fw-bold">All the Listings are Here</h3>
             </div>
-            </a>
-            
+
+            <!-- Toggle Switch -->
+            <div class="form-check form-switch toggle-tax">
+                <input
+                    class="form-check-input"
+                    type="checkbox"
+                    role="switch"
+                    id="flexswitchcheckdefault"
+                />
+                <label class="form-check-label ms-2" for="flexswitchcheckdefault">
+                    <strong>Display  taxes</strong>
+                </label>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="allcards row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 g-4">
+        <% for (let listing of allListings) { %>
+            <div class="col">
+                <a href="/listings/<%= listing._id %>" class="listing-link">
+                    <div class="card listing-card" style="width: 100%;">
+                        <img
+                            src="<%= listing.image.url %>"
+                            class="card-img-top"
+                            alt="listing image"
+                            style="height: 20rem; object-fit: cover;"
+                        />
+                        <div class="card-body">
+                            <p class="card-text">
+                                <strong><%= listing.title %></strong><br />
+                                ₹<%= listing.price.toLocaleString("en-IN") %>/night
+                                <span class="tax-info"> &nbsp; +18% GST</span>
+                            </p>
+                        </div>
+                    </div>
+                </a>
+            </div>
         <% } %>
     </div>
-   
+
+    <script>
+        const taxSwitch = document.getElementById("flexswitchcheckdefault");
+        const taxInfos = document.getElementsByClassName("tax-info");
+
+        taxSwitch.addEventListener("change", () => {
+            for (let info of taxInfos) {
+                info.style.display = taxSwitch.checked ? "inline" : "none";
+            }
+        });
+    </script>
 </body>
-
-

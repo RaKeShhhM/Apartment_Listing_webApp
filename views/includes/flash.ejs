@@ -1,25 +1,40 @@
-<% if(success && success.length) {%>
-    <div class="alert alert-success alert-dismissible fade show col-6 offset-3" role="alert">
-        <%= success %>
-        <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="alert"
-            aria-label="close"
-        ></button>
+<% /* Flash message container: centers alerts and gives vertical spacing */ %>
+<div class="container my-4">
+  <% /* Success alert: only shows when `success` is truthy */ %>
+  <% if (success && success.length) { %>
+    <div
+      class="alert alert-success alert-dismissible fade show mx-auto"
+      role="alert"
+      style="max-width: 600px;"  <% /* Limit width for readability */ %>
+    >
+      <i class="bi bi-check-circle-fill me-2"></i>  <% /* Success icon */ %>
+      <%= success %>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
     </div>
-<% } %>
+  <% } %>
 
-
-<%# we go to the url of deleted listing which doesn't exist anymore, then this error will be displayed %>
-<% if(error && error.length) {%>
-    <div class="alert alert-danger alert-dismissible fade show col-6 offset-3" role="alert">
-        <%= error %>
-        <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="alert"
-            aria-label="close"
-        ></button>
+  <% /* Error alert: only shows when `error` is truthy */ %>
+  <% if (error && error.length) { %>
+    <div
+      class="alert alert-danger alert-dismissible fade show mx-auto mt-3"
+      role="alert"
+      style="max-width: 600px;"  <% /* Match width to success alert */ %>
+    >
+      <i class="bi bi-exclamation-triangle-fill me-2"></i>  <% /* Error icon */ %>
+      <%= error %>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
     </div>
-<% } %>
+  <% } %>
+</div>
+
+<% /* Ensure you have Bootstrap Icons loaded for the icons above */ %>

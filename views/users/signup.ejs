@@ -1,29 +1,231 @@
 <% layout("/layouts/boilerplate") %>
 
-<body>
-    <div class="row mt-3">
-        <h3 class="mb-3 col-6 offset-3 ">Signup on WanderLust</h3>
-        <div class="col-6 offset-3 ">
-           
-                <form action="/signup" method="post" novalidate class="needs-validation">
-                    <div class="mb-3">
-                        <label for="username" class="form-label">Username</label>
-                        <input type="text" class="form-control" name="username" id="username"
-                            placeholder="Enter Username" required>
-                        <div class="valid-feedback">Looks good!</div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" name="email" id="email" placeholder="Enter Email"
-                            required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" name="password" id="password"
-                            placeholder="Enter Password" required>
-                    </div>
-                    <button class="btn btn-success">SignUp</button>
-                </form>
-        </div>
+<style>
+  body {
+    background: linear-gradient(to right, #dbeafe, #ddd6fe);
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+  .auth-wrapper {
+    min-height: calc(100vh - 200px); /* leave space for header/footer */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+  }
+
+  .auth-box {
+    height: 90vh;
+    display: flex;
+    max-width: 1000px;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(10px);
+  }
+
+  /* Left image showcase */
+  .left-pane {
+    flex: 1;
+    display: grid;
+    grid-template-areas:
+      "a a"
+      "c b";
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 250px 350px 350px;
+    gap: 20px;
+    padding: 20px;
+    background: rgba(255,255,255,0.5);
+  }
+  .left-pane .img1 { grid-area: a; }
+  .left-pane .img2 { grid-area: b; }
+  .left-pane .img3 { grid-area: c; }
+
+  .left-pane div {
+    background-size: cover;
+    background-position: center;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    transition: transform .3s ease;
+  }
+  .left-pane div:hover {
+    transform: translateY(-5px);
+  }
+
+  /* Right signup form */
+  .right-pane {
+    flex: 1;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .right-pane h3 {
+    text-align: center;
+    font-weight: 600;
+    margin-bottom: 30px;
+    color: #111;
+  }
+
+  .form-label { color: #333; }
+
+  .form-control {
+    background: rgba(255,255,255,0.9);
+    border: 1px solid #ccc;
+    color: #111;
+  }
+  .form-control::placeholder { color: #999; }
+
+  .btn-success {
+    width: 100%;
+    font-weight: 500;
+    font-size: 1.1rem;
+  }
+
+  .form-group.position-relative {
+    position: relative;
+  }
+  .toggle-password {
+    position: absolute;
+    right: 15px;
+    top: 38px;
+    cursor: pointer;
+    color: #666;
+  }
+
+  .terms {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+  }
+
+  .signup-footer {
+    text-align: center;
+    margin-top: 20px;
+  }
+  .signup-footer a {
+    color: #222;
+    font-weight: 500;
+    text-decoration: underline;
+  }
+
+
+   @media (max-width: 990px) {
+    .auth-wrapper{
+        padding: 15px;
+    }
+    .img3{
+        display: none;
+    }
+    .left-pane {
+        flex: 1;
+        display: grid;
+        grid-template-areas:
+        "a a"
+        "b b";
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 250px 350px ;
+        gap: 20px;
+        padding: 20px;
+        background: rgba(255,255,255,0.5);
+    }
+   
+    .left-pane .img2 { grid-area: b; }
+  }
+
+  @media (max-width: 768px) {
+    .auth-wrapper{
+        padding: 5px;
+    }
+    .auth-box { 
+        height: auto;
+        flex-direction: column; 
+        justify-content: center;
+    }
+    
+    .right-pane { 
+        gap: 5px;
+        padding: 5px; width: 100%; }
+
+        .left-pane { grid-template-areas: "a a" ; grid-template-columns: 1fr 1fr; grid-template-rows: 250px; gap: 5px;
+        padding: 5px;}
+    
+  }
+
+ 
+</style>
+
+<div class="auth-wrapper">
+  <div class="auth-box">
+    <!-- Left: 3 overlapping house images -->
+    <div class="left-pane">
+      <div class="img1" style="background-image:url('/images/image1.jpg');"></div>
+      <div class="img2" style="background-image:url('/images/image6.jpg');"></div>
+      <div class="img3" style="background-image:url('/images/image7.jpg');"></div>
     </div>
-</body>
+
+    <!-- Right: Signup form -->
+    <div class="right-pane">
+      <h3>Create Your StayComfy Account</h3>
+      <form action="/signup" method="post" novalidate class="needs-validation" id="signupForm">
+        <div class="mb-3">
+          <label for="username" class="form-label">Username</label>
+          <input type="text" class="form-control" name="username" id="username"
+                 placeholder="Choose a username" required>
+          <div class="valid-feedback">Looks good!</div>
+        </div>
+
+        <div class="mb-3">
+          <label for="email" class="form-label">Email Address</label>
+          <input type="email" class="form-control" name="email" id="email"
+                 placeholder="you@example.com" required>
+        </div>
+
+        <div class="mb-3 form-group position-relative">
+          <label for="password" class="form-label">Password</label>
+          <input type="password" class="form-control" name="password" id="password"
+                 placeholder="Create a password" required>
+          <i class="bi bi-eye-slash toggle-password" data-toggle="password" data-target="password"></i>
+        </div>
+
+        <div class="mb-3 form-group position-relative">
+          <label for="confirmPassword" class="form-label">Confirm Password</label>
+          <input type="password" class="form-control" name="confirmPassword" id="confirmPassword"
+                 placeholder="Re-enter your password" required>
+          <i class="bi bi-eye-slash toggle-password" data-toggle="password" data-target="confirmPassword"></i>
+        </div>
+
+        <div class="terms">
+          <input type="checkbox" id="terms" required>
+          <label for="terms">I agree to the <a href="/terms">Terms & Privacy</a></label>
+        </div>
+
+        <button type="submit" class="btn btn-success">Sign Up</button>
+
+        <div class="signup-footer">
+          Already have an account? <a href="/login">Login here</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+
+<script>
+  // Password toggle for both fields
+  document.querySelectorAll('.toggle-password').forEach(icon => {
+    icon.addEventListener('click', () => {
+      const tgt = document.getElementById(icon.dataset.target);
+      const type = tgt.type === 'password' ? 'text' : 'password';
+      tgt.type = type;
+      icon.classList.toggle('bi-eye');
+      icon.classList.toggle('bi-eye-slash');
+    });
+  });
+</script>

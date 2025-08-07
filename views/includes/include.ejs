@@ -1,29 +1,226 @@
-<nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top ">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#"><i class="fa-regular fa-compass"></i></a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" 
-    >
-    <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
-        <a class="nav-link "  href="/">Home</a>
-        <a class="nav-link" href="/listings">All Listings</a>
-        <a class="nav-link" href="/listings/new">Add new Listing</a><%# it will take us add new listing page %>
-        
+ <style>
+    .navbar {
+      height: 6rem !important;           /* ↑ increased from 5rem */
+      backdrop-filter: blur(8px);
+      background: #ebebeb !important;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+      border-bottom: 1px solid #eaeaea;
+      position: sticky;                  /* ↑ changed from relative */
+      top: 0;                            /* ↑ ensure it sticks to top */
+      z-index: 1000;
+    }
+
+    .navbar-brand {
+      font-weight: 600;
+      font-size: 1.5rem;
+      color: #fe424d;
+      display: flex;
+      align-items: center;
+    }
+    .navbar-brand .fa-compass {
+      margin-right: 0.5rem;
+    }
+    .nav-link {
+      margin-left: 1rem;
+      font-weight: 500;
+      color: #333;
+      transition: all 0.2s ease-in-out;
+    }
+    .nav-link:hover {
+      color: #fe424d;
+      transform: translateY(-2px);
+    }
+    .search-form {
+      max-width: 600px;
+      width: 100%;
+    }
+    .search-inp {
+      border-radius: 25px 0 0 25px;
+      padding: 0.6rem 1rem;
+      
+      box-shadow: none;
+      border: none;
+    }
+    .search-btn {
+      background-color: #fe424d;
+      color: #fff;
+      border-radius: 0 25px 25px 0;
+      padding: 0.6rem 1.5rem;
+      border: none;
+    }
+    .search-btn:hover {
+      background-color: #e93c46;
+    }
+
+    /* Floating Menu Styles for Mobile */
+    .floating-menu {
+      position: absolute;
+      top: 100%;
+      right: 10px;
+      background-color: #161616;
+      border-radius: 10px;
+      border: 1px solid #444;
+      padding: 10px 0;
+      width: 200px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+      display: none;
+      flex-direction: column;
+      z-index: 9999;
+    }
+    .floating-menu a {
+      color: #f5f5f5;
+      padding: 10px 20px;
+      text-decoration: none;
+      font-weight: 500;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      transition: background 0.2s ease;
+    }
+    .floating-menu a:last-child {
+      border-bottom: none;
+    }
+    .floating-menu a:hover {
+      background-color: #333;
+    }
+    .navbar-toggler-icon {
+      filter: invert(1) brightness(1.5);
+    }
+
+    /* Small-screen tweaks */
+    @media (max-width: 576px) {
+      .navbar-brand i{
+        font-size: 2.2rem;
+      }
+      .name{
+        display: none;
+      }
+      
+      .logo-img {
+        height: 28px;
+      }
+      .search-form {
+        max-width: 100%;
+      }
+      .search-inp {
+        border-radius: 20px 0 0 20px;
+      }
+      .search-btn {
+        border-radius: 0 20px 20px 0;
+        padding: 0.6rem 1rem;
+      }
+      .floating-menu{
+        margin-left: o.5rem;
+      }
+    }
+
+    /* Reorder on mobile so search sits between brand & toggler */
+    @media (max-width: 767.98px) {
+      .navbar .container-fluid {
+        flex-wrap: nowrap;
+        align-items: center;
+      }
+      .navbar-brand {
+        order: 0;
+      }
+
+      .search-form {
+        order: 1;
+        flex: 1 1 auto;
+        margin: 0;
+        max-width: none;
+      }
+      .navbar-toggler {
+        order: 2;
+      }
+    }
+
+    /* Hide floating menu on larger than mobile */
+    @media (min-width: 768px) {
+      .floating-menu {
+        display: none !important;
+      }
+    }
+  </style>
+
+<body>
+
+  <nav class="navbar navbar-expand-md sticky-top">
+    <div class="container-fluid">
+      <!-- Logo / Brand -->
+      <a class="navbar-brand" href="/listings">
+        <i class="fa-regular fa-compass"></i>
+        <span class="name">StayComfy</span>
+      </a>
+
+      <!-- Hamburger: toggles floating menu on mobile -->
+      <button
+        class="navbar-toggler border-0"
+        type="button"
+        onclick="toggleFloatingMenu()"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Search: always visible, centered -->
+      <form
+        action="/listings/search"
+        method="GET"
+        class="d-flex search-form mx-auto my-3 my-md-0"
+        role="search"
+      >
+        <input
+          class="form-control search-inp"
+          type="search"
+          name="query"
+          placeholder="Search listings..."
+          aria-label="Search"
+        />
+        <button class="btn search-btn" type="submit">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+      </form>
+
+      <!-- Desktop-only nav links -->
+      <div
+        class="collapse navbar-collapse d-none d-md-flex"
+        id="navbarNavAltMarkup"
+      >
+        <div class="navbar-nav ms-auto align-items-center">
+          <a class="nav-link explore" href="/listings">Explore</a>
+          <a class="nav-link" href="/listings/new">Add Listing</a>
+          <% if (!currUser) { %>
+            <a class="nav-link" href="/signup"><b>Sign Up</b></a>
+            <a class="nav-link" href="/login"><b>Log In</b></a>
+          <% } else { %>
+            <a class="nav-link" href="/logout">Logout</a>
+          <% } %>
+        </div>
       </div>
-       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav ms-auto">
-        <%# only sign up and login will show %>
-        <% if(!currUser) { %>
-        <a class="nav-link "  href="/signup">Sign up</a>
-        <a class="nav-link" href="/login">Log in</a>
+
+      <!-- Mobile floating menu -->
+      <div id="floatingMenu" class="floating-menu">
+        <a href="/listings">Explore</a>
+        <a href="/listings/new">Add Listing</a>
+        <% if (!currUser) { %>
+          <a href="/signup"><b>Sign Up</b></a>
+          <a href="/login"><b>Log In</b></a>
+        <% } else { %>
+          <a href="/logout">Logout</a>
         <% } %>
-        <%# only logout will show %>
-        <% if(currUser) { %>
-        <a class="nav-link" href="/logout">Logout</a>
-         <% } %>
       </div>
     </div>
-  </div>
-</nav>
+  </nav>
+
+  <script>
+    function toggleFloatingMenu() {
+      const menu = document.getElementById("floatingMenu");
+      menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+    }
+    window.addEventListener("click", function (e) {
+      const menu = document.getElementById("floatingMenu");
+      const btn = document.querySelector(".navbar-toggler");
+      if (!menu.contains(e.target) && !btn.contains(e.target)) {
+        menu.style.display = "none";
+      }
+    });
+  </script>
+</body>

@@ -1,4 +1,54 @@
 <% layout("/layouts/boilerplate.ejs") %>
+
+<style>
+  /* Container background accent */
+  .review-section {
+    background: #f8f9fa;
+    padding: 2rem 0;
+  }
+
+  /* Card styling */
+  .review-card {
+    border: none;
+    border-radius: 1rem;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    transition: transform 0.2s;
+  }
+  .review-card:hover {
+    transform: translateY(-4px);
+  }
+
+  /* Form card header */
+  .review-form-header {
+    background: #fff;
+    border-bottom: none;
+    text-align: center;
+    padding: 1.5rem;
+    border-radius: 1rem 1rem 0 0;
+  }
+  .review-form-header h4 {
+    margin: 0;
+    font-weight: 600;
+    color: #0d6efd;
+  }
+
+  /* Preserve your existing starability-slot effects */
+  .starability-slot {
+    --star-size: 2rem;
+    display: inline-block;
+    margin: 0 auto 1.5rem;
+  }
+
+  /* Comment textarea and submit */
+  .btn-review {
+    width: 100%;
+    font-weight: 500;
+  }
+  .form-control:focus {
+    box-shadow: 0 0 0 0.2rem rgba(13,110,253,0.25);
+  }
+</style>
+
 <body>
     <!-- <h3>Listing details :-</h3>
 
@@ -18,10 +68,12 @@
   <div class="container py-5">
     <div class="row justify-content-center">
       <div class="col-md-8">
-        <h3 class="card-title mb-4 text-primary fw-bold"><%= listing.title %></h3>
+        <div class="titles">
+          <h3 class="card-title mb-4 text-primary fw-bold"><%= listing.title %></h3>
+        </div>
         <div class="card listing-card shadow-sm border-0 rounded-4 overflow-hidden">
           <!-- Listing Image -->
-          <img src="<%= listing.image %>" alt="Listing Image" class="card-img-top object-fit-cover" style="height: 400px;">
+          <img src="<%= listing.image.url %>" alt="Listing Image" class="card-img-top object-fit-cover" style="height: 400px;">
 
           <div class="card-body">
             
@@ -54,84 +106,98 @@
     </div>
 </div>
 
-<div class="container py-5">
-  <div class="row justify-content-center">
-    <div class="col-md-8">
-     
-         <h4>Leave a Review :</h4>
-          <form action="/listings/<%= listing._id %>/reviews" method="POST" novalidate class="needs-validation">
-            <div class="mb-3 mt-3">
-              <label for="rating" class="form-label"> Rating</label>
-              <fieldset class="starability-slot">
-                
-                <input 
-                type="radio" 
-                id="no-rate" 
-                class="input-no-rate" 
-                name="review[rating]" 
-                value="1" 
-                checked aria-label="No rating." />
-                <input type="radio" id="first-rate1" name="review[rating]" value="1" />
-                <label for="first-rate1" title="Terrible">1 star</label>
-                <input type="radio" id="first-rate2" name="review[rating]" value="2" />
-                <label for="first-rate2" title="Not good">2 stars</label>
-                <input type="radio" id="first-rate3" name="review[rating]" value="3" />
-                <label for="first-rate3" title="Average">3 stars</label>
-                <input type="radio" id="first-rate4" name="review[rating]" value="4" />
-                <label for="first-rate4" title="Very good">4 stars</label>
-                <input type="radio" id="first-rate5" name="review[rating]" value="5" />
-                <label for="first-rate5" title="Amazing">5 stars</label>
-              </fieldset>
-            </div>
-              <!-- <input type="range" min="1" max="5" class="form-range" id="rating" name="review[rating]">
-             -->
-            <div class="mb-3 mt-3">
-              <label for="comment" class="form-label"> Comments</label>
-              <textarea name="review[comment]" id="comment"
-              cols="30"
-              rows="5"
-              class="form-control"
-              required
-              ></textarea>
-              <div class="invalid-feedback">
-                Please submit some comments for review
-              </div>
-            </div>
-            <button class="btn btn-outline-dark">Submit</button>
-          </form>
-          <hr/>
-      
-          
+<div class="review-section">
+  <div class="container">
+    <div class="row justify-content-center">
 
-          <h4>All Reviews</h4>
-          <div class="row">
-            <% for(review of listing.reviews) {%>
-              <div class="card col-5 ms-3 mb-3">
+      <!-- Review Form Card -->
+      <div class="col-lg-8 mb-5">
+        <div class="card review-card">
+          <div class="review-form-header">
+            <h4>Leave a Review</h4>
+          </div>
+          <div class="card-body">
+
+            <!-- Review Form -->
+            <form action="/listings/<%= listing._id %>/reviews" method="POST" class="needs-validation" novalidate>
+              
+              <!-- Star Rating (original starability-slot preserved) -->
+              <div class="mb-4 text-center">
+                <fieldset class="starability-slot">
+                  <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="0" checked aria-label="No rating." />
+                  <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+                  <label for="first-rate1" title="Terrible">1 star</label>
+                  <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+                  <label for="first-rate2" title="Not good">2 stars</label>
+                  <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+                  <label for="first-rate3" title="Average">3 stars</label>
+                  <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+                  <label for="first-rate4" title="Very good">4 stars</label>
+                  <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+                  <label for="first-rate5" title="Amazing">5 stars</label>
+                </fieldset>
+              </div>
+
+              <!-- Comment Box -->
+              <div class="mb-4">
+                <textarea 
+                  class="form-control" 
+                  name="review[comment]" 
+                  rows="4" 
+                  placeholder="Write your thoughts..." 
+                  required
+                ></textarea>
+                <div class="invalid-feedback">
+                  Please enter a comment.
+                </div>
+              </div>
+
+              <!-- Submit -->
+              <button type="submit" class="btn btn-primary btn-review">
+                <i class="fa-solid fa-paper-plane me-2"></i>Submit Review
+              </button>
+            </form>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Existing Reviews List -->
+      <div class="col-lg-8">
+        <h4 class="mb-4">All Reviews</h4>
+        <div class="row g-4">
+          <% for (let review of listing.reviews) { %>
+            <div class="col-md-6 user-review">
+              <div class="card review-card">
                 <div class="card-body">
-                  <h5 class="card-title"><% if (review.author) { %>
-                    @<%= review.author.username %>
-                  <% } else { %>
-                    <em>Unknown</em>
-                  <% } %>
+                  <!-- Author -->
+                  <h5 class="card-title">
+                    <% if (review.author) { %>
+                      @<%= review.author.username %>
+                    <% } else { %>
+                      <em>Unknown</em>
+                    <% } %>
                   </h5>
-                  <p class="starability-result card-text" data-rating="<%= review.rating %>">
-                    
-                  </p>
-                  <p class="card-text">
-                    <%= review.comment %>
-                  </p>
-                 
-                  <form class="mb-3" method="POST" action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE">
-                    <button class="btn btn-sm btn-dark mb-3">Delete</button>
+                  <!-- Star Display: reuse starability-slot for display too -->
+                  <p class="starability-result mb-2" data-rating="<%= review.rating %>"></p>
+                  <!-- Comment -->
+                  <p class="card-text"><%= review.comment %></p>
+                  <!-- Delete -->
+                  <form method="POST" action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE">
+                    <button class="btn btn-sm btn-outline-danger">
+                      <i class="fa-solid fa-trash-can me-1"></i>Delete
+                    </button>
                   </form>
                 </div>
               </div>
-            <% } %>
-          </div>
+            </div>
+          <% } %>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
-
 <%# Modal Backdrop and Modal Box %>
 <div id="backdrop" class="modal-backdrop-custom" style="display: none;"></div>
 
