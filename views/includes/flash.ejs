@@ -1,0 +1,35 @@
+<div class="container my-4">
+  <% if (success && success.length) { %>
+    <div
+      class="alert alert-success alert-dismissible fade show mx-auto"
+      role="alert"
+      style="max-width: 600px;"
+    >
+      <i class="bi bi-check-circle-fill me-2"></i>
+      <%= success %>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+    </div>
+  <% } %>
+
+  <% if (error && error.length) { %>
+    <div
+      class="alert alert-danger alert-dismissible fade show mx-auto mt-3"
+      role="alert"
+      style="max-width: 600px;"
+    >
+      <i class="bi bi-exclamation-triangle-fill me-2"></i>
+      <%= error %>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+    </div>
+  <% } %>
+</div>

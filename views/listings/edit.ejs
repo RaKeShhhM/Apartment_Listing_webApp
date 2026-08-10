@@ -1,0 +1,109 @@
+<% layout("/layouts/boilerplate.ejs") %>
+
+<style>
+    body {
+    background-color: #f5f7fa;
+    font-family: 'Segoe UI', 'Roboto', sans-serif;
+}
+
+.card {
+    border: none;
+    background-color: #ffffff;
+}
+
+input[type="text"],
+input[type="number"],
+textarea,
+input[type="file"] {
+    box-shadow: none !important;
+    transition: border 0.3s ease-in-out;
+}
+
+input:focus,
+textarea:focus {
+    border-color: #6c63ff !important;
+    box-shadow: 0 0 0 0.1rem rgba(108, 99, 255, 0.25);
+}
+
+</style>
+<div class="container d-flex justify-content-center align-items-center mt-5 px-3">
+    <div class="card p-4 shadow-lg rounded-4 w-100" style="max-width: 720px; background-color: #ffffff;">
+        <h2 class="text-center mb-3 text-primary fw-bold">✏️ Edit Your Listing</h2>
+        <p class="text-center text-muted mb-4">Update your apartment details below</p>
+
+        <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" enctype="multipart/form-data" novalidate class="needs-validation">
+            <!-- Title -->
+            <div class="mb-3">
+                <label for="title" class="form-label">🏷️ Title</label>
+                <input name="listing[title]" value="<%= listing.title %>" type="text" class="form-control rounded-3" required>
+                <div class="valid-feedback">Looks good!</div>
+            </div>
+
+            <!-- Description -->
+            <div class="mb-3">
+                <label for="description" class="form-label">📝 Description</label>
+                <textarea name="listing[description]" rows="3" class="form-control rounded-3" required><%= listing.description %></textarea>
+                <div class="invalid-feedback">Please enter a valid description.</div>
+            </div>
+
+            <!-- Original Image -->
+            <div class="mb-3">
+                <label class="form-label">🖼️ Current Image</label><br>
+                <img src="<%= originalImageUrl %>" class="img-fluid rounded-3 mb-2" alt="Listing image">
+            </div>
+
+            <!-- Upload New Image -->
+            <div class="mb-3">
+                <label for="image" class="form-label">📤 Upload New Image</label>
+                <input name="listing[image]" type="file" class="form-control rounded-3">
+            </div>
+
+            <!-- Price and Country -->
+            <div class="row">
+                <div class="mb-3 col-md-4">
+                    <label for="price" class="form-label">💰 Price (₹)</label>
+                    <input name="listing[price]" value="<%= listing.price %>" type="number" class="form-control rounded-3" required>
+                    <div class="invalid-feedback">Enter a valid price.</div>
+                </div>
+
+                <div class="mb-3 col-md-8">
+                    <label for="country" class="form-label">🌍 Country</label>
+                    <input name="listing[country]" value="<%= listing.country %>" type="text" class="form-control rounded-3" required>
+                    <div class="invalid-feedback">Enter a valid country name.</div>
+                </div>
+            </div>
+
+            <!-- Location -->
+            <div class="mb-3">
+                <label for="location" class="form-label">📍 Location</label>
+                <input name="listing[location]" value="<%= listing.location %>" type="text" class="form-control rounded-3" required>
+                <div class="invalid-feedback">Enter a valid location.</div>
+            </div>
+
+            <!-- Submit -->
+            <div class="d-grid">
+                <button class="btn btn-primary rounded-3 fw-semibold py-2 mb-2">Update Listing</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Optional: Client-side Bootstrap Validation Script -->
+<script>
+    (() => {
+        'use strict';
+        const forms = document.querySelectorAll('.needs-validation');
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', e => {
+                if (!form.checkValidity()) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    })();
+</script>
+
+
+

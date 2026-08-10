@@ -1,0 +1,122 @@
+<footer class="sc-footer">
+  <div class="sc-footer-inner">
+
+    <!-- Left: Brand -->
+    <div class="footer-brand">
+      <i class="fa-regular fa-compass"></i>
+      <span>StayComfy</span>
+    </div>
+
+    <!-- Center: Links -->
+    <div class="footer-links">
+      <a href="/privacy">Privacy</a>
+      <a href="/terms">Terms</a>
+      <a href="/help">Help</a>
+    </div>
+
+    <!-- Right: Socials -->
+    <div class="footer-socials">
+      <a href="https://www.facebook.com/" aria-label="Facebook">
+        <i class="fa-brands fa-facebook"></i>
+      </a>
+      <a href="https://www.instagram.com/____ruhaan___/" aria-label="Instagram">
+        <i class="fa-brands fa-instagram"></i>
+      </a>
+      <a href="https://www.linkedin.com/in/rakesh-mahato-225487189/" aria-label="LinkedIn">
+        <i class="fa-brands fa-linkedin"></i>
+      </a>
+      <a href="https://www.youtube.com/@TheweirdoMr" aria-label="YouTube">
+        <i class="fa-brands fa-youtube"></i>
+      </a>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    © <span id="year"></span> StayComfy Private Limited
+  </div>
+</footer>
+
+<script>
+  document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+
+
+<style>
+    .sc-footer {
+  box-shadow: var(--darkreader-background-0000000d, rgba(0, 0, 0, 0.05)) 0px 8px 20px;
+  color: #cfcfcf;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  font-size: 0.9rem;
+}
+
+.sc-footer-inner {
+  max-width: 1200px;
+  margin: auto;
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Brand */
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 10 rem;
+  font-weight: 700;
+  color: #ff5252;
+  font-size: 1.05rem;
+}
+
+.footer-brand i {
+  font-size: 1.1rem;
+}
+
+/* Center links */
+.footer-links a {
+  margin: 0 0.8rem;
+  text-decoration: none;
+  color: #bdbdbd;
+  font-weight: 500;
+}
+
+.footer-links a:hover {
+  color: #ff5252;
+}
+
+/* Social icons */
+.footer-socials a {
+  margin-left: 0.7rem;
+  color: #bdbdbd;
+  font-size: 1.1rem;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.footer-socials a:hover {
+  color: #ff5252;
+  transform: translateY(-2px);
+}
+
+/* Bottom copyright */
+.footer-bottom {
+  text-align: center;
+  padding: 0.5rem 0 0.8rem;
+  font-size: 0.75rem;
+  color: #888;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .sc-footer-inner {
+    flex-direction: column;
+    gap: 0.7rem;
+    text-align: center;
+  }
+
+  .footer-links {
+    order: 3;
+  }
+}
+
+</style>
